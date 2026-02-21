@@ -18,7 +18,7 @@ class Project(models.Model):
 
 
 class ProjectPlace(models.Model):
-    """Place in a project: linked to Art Institute artwork by external id, with notes and visited flag."""
+    """Place in a project: linked to Art Institute artwork by external id, with notes and visited flag."""  # noqa: E501
 
     project = models.ForeignKey(
         Project,
