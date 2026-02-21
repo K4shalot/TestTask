@@ -1,0 +1,15 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=travel_planner.settings
+      - SECRET_KEY=${DJANGO_SECRET_KEY:-django-insecure-docker-dev-change-in-production}
+      - DEBUG=${DEBUG:-0}
+      - SQLITE_PATH=/app/db/db.sqlite3
+    volumes:
+      - db_data:/app/db
+
+volumes:
+  db_data:
