@@ -7,8 +7,6 @@ MAX_PLACES_PER_PROJECT = 10
 
 
 class ProjectPlaceListSerializer(serializers.ModelSerializer):
-    """Read-only for nested in project."""
-
     class Meta:
         model = ProjectPlace
         fields = ("id", "external_artwork_id", "notes", "visited", "created_at", "updated_at")
@@ -34,13 +32,11 @@ class ProjectSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created_at", "updated_at", "places", "completed")
 
     def get_completed(self, obj):
-        places = obj.places.all()
-        return places.count() > 0 and all(p.visited for p in places)
+        places = list(obj.places.all())
+        return len(places) > 0 and all(p.visited for p in places)
 
 
 class ProjectCreateUpdateSerializer(serializers.ModelSerializer):
-    """Input: name, description, start_date; optional places (list of external_artwork_id)."""
-
     places = serializers.ListField(
         child=serializers.CharField(),
         required=False,
@@ -96,8 +92,6 @@ class ProjectCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class ProjectPlaceCreateSerializer(serializers.ModelSerializer):
-    """Add place to project: external_artwork_id, optional notes."""
-
     class Meta:
         model = ProjectPlace
         fields = ("external_artwork_id", "notes")
@@ -127,8 +121,6 @@ class ProjectPlaceCreateSerializer(serializers.ModelSerializer):
 
 
 class ProjectPlaceUpdateSerializer(serializers.ModelSerializer):
-    """Update notes and/or visited."""
-
     class Meta:
         model = ProjectPlace
         fields = ("notes", "visited")

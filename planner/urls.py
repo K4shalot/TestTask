@@ -8,7 +8,6 @@ from planner.views import ProjectPlaceViewSet, ProjectViewSet
 router = DefaultRouter()
 router.register(r"projects", ProjectViewSet, basename="project")
 
-# Nested: /api/projects/<id>/places/ and /api/projects/<id>/places/<id>/
 places_list = ProjectPlaceViewSet.as_view({"get": "list", "post": "create"})
 places_detail = ProjectPlaceViewSet.as_view(
     {"get": "retrieve", "patch": "partial_update", "put": "update"}

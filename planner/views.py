@@ -14,8 +14,6 @@ from planner.serializers import (
 
 
 class ProjectViewSet(ModelViewSet):
-    """List, create, retrieve, update, delete travel projects."""
-
     serializer_class = ProjectSerializer
 
     def get_queryset(self):
@@ -30,7 +28,7 @@ class ProjectViewSet(ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         project = serializer.save()
-        project = self.get_queryset().get(pk=project.pk)  # prefetch places for response
+        project = self.get_queryset().get(pk=project.pk)
         return Response(
             ProjectSerializer(project).data,
             status=status.HTTP_201_CREATED,
@@ -48,8 +46,6 @@ class ProjectViewSet(ModelViewSet):
 
 
 class ProjectPlaceViewSet(ModelViewSet):
-    """List, add, retrieve, update places of a project. Nested under /projects/<id>/places/."""
-
     serializer_class = ProjectPlaceListSerializer
     http_method_names = ["get", "post", "patch", "put", "head", "options"]
 
@@ -71,7 +67,8 @@ class ProjectPlaceViewSet(ModelViewSet):
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        context["project"] = self.get_project()
+        if self.action == "create":
+            context["project"] = self.get_project()
         return context
 
     def create(self, request, *args, **kwargs):
